@@ -1,7 +1,7 @@
-# ============================================================
-# SSS(Secure-Search-Site) Vr1.0.0 released!!!!
-# ============================================================
-print("SSS(Secure-Search-Site) Vr1.0.0")
+# ===================================================================
+# SSS(Secure-Search-Site) Secure Proxy System Vr1.0.0 released!!!!
+# ===================================================================
+print("SSS(Secure-Search-Site) Secure Proxy System Vr1.0.0")
 # 1. install
 !apt-get update -qq && apt-get install -y -qq tor
 !pip install flask requests requests[socks] cryptography -q
