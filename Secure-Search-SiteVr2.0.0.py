@@ -4,6 +4,7 @@
 # ===================================================================
 # SSS(Secure-Search-Site) Secure Proxy System Vr2.0.0 released!!!!
 # ===================================================================
+print("SSS(Secure-Search-Site) Secure Proxy System Vr1.0.0")
 import os
 import time
 import secrets
