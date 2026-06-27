@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Proxy System – How to Use</title>
+
+  <!-- Inter Font (Mobbin standard) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       Mobbin-inspired Design System
+       Based on: https://tessl.io/registry/skills/github/ihlamury/design-skills/mobbin-ui-skills
+       ============================================================ */
+
+    /* ----- Reset & Base ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #1b1b1b;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ----- Container ----- */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* ----- Typography (Mobbin tokens) ----- */
+    .heading-1 {
+      font-size: 75px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #1b1b1b;
+      text-wrap: balance;
+    }
+
+    .heading-2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #1b1b1b;
+      text-wrap: balance;
+    }
+
+    .heading-3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1b1b1b;
+    }
+
+    .body-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: #4a4a4a;
+      text-wrap: pretty;
+    }
+
+    .body-text-sm {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6b7280;
+      text-wrap: pretty;
+    }
+
+    .text-muted {
+      color: #939393;
+    }
+
+    .text-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .text-link:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* ----- Header ----- */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header .badge {
+      display: inline-block;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
+    }
+
+    .header .subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    /* ----- Language Tabs (Mobbin style) ----- */
+    .lang-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 40px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .lang-tab {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lang-tab:hover {
+      color: #1b1b1b;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .lang-tab.active {
+      background: #ffffff;
+      color: #1b1b1b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ----- Card (Mobbin surface-raised) ----- */
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: box-shadow 0.2s ease;
+      border: 1px solid #f1f5f9;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+
+    /* ----- Section ----- */
+    .section {
+      margin-top: 40px;
+    }
+
+    .section:first-of-type {
+      margin-top: 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 16px;
+    }
+
+    .section-title i {
+      color: #4f46e5;
+      font-size: 22px;
+    }
+
+    /* ----- Step (4px grid spacing) ----- */
+    .step {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #f8fafc;
+    }
+
+    .step:last-child {
+      border-bottom: none;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 15px;
+      color: #4a4a4a;
+      margin: 0;
+    }
+
+    /* ----- Code Block (Mobbin style) ----- */
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 8px;
+      border: 1px solid #334155;
+    }
+
+    .code-block .comment {
+      color: #94a3b8;
+    }
+
+    .code-block .keyword {
+      color: #f472b6;
+    }
+
+    .code-block .string {
+      color: #34d399;
+    }
+
+    .code-block .command {
+      color: #60a5fa;
+    }
+
+    /* ----- Grid Layout (Security section) ----- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .grid-item {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .grid-item h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-item h4 .icon-green {
+      color: #22c55e;
+    }
+
+    .grid-item h4 .icon-purple {
+      color: #8b5cf6;
+    }
+
+    .grid-item ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .grid-item ul li {
+      font-size: 14px;
+      color: #4a4a4a;
+      padding: 3px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .grid-item ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #94a3b8;
+    }
+
+    /* ----- Alert Box (Mobbin style) ----- */
+    .alert {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+
+    .alert h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .alert h4 i {
+      color: #d97706;
+    }
+
+    .alert ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .alert ul li {
+      font-size: 14px;
+      color: #78350f;
+      padding: 2px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .alert ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #d97706;
+    }
+
+    .alert .highlight {
+      font-weight: 600;
+      color: #78350f;
+    }
+
+    /* ----- Footer ----- */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .footer .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* ----- Utilities (hidden for language switcher) ----- */
+    .lang-content.hidden {
+      display: none;
+    }
+
+    .lang-content:not(.hidden) {
+      display: block;
+    }
+
+    /* ----- Responsive ----- */
+    @media (max-width: 768px) {
+      .container {
+        padding: 24px 16px;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+
+      .heading-1 {
+        font-size: 40px;
+      }
+
+      .heading-2 {
+        font-size: 22px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        gap: 12px;
+      }
+
+      .lang-tabs {
+        max-width: 100%;
+        gap: 2px;
+      }
+
+      .lang-tab {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+
+      .code-block {
+        font-size: 12px;
+        padding: 12px 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .heading-1 {
+        font-size: 32px;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ============================================================
+  HEADER
+  ============================================================ -->
+  <header class="header">
+    <div class="badge"><i class="fas fa-shield-alt" style="margin-right: 6px;"></i> Privacy First</div>
+    <h1 class="heading-1">Secure Proxy System</h1>
+    <p class="subtitle">Anonymous browsing powered by Cloudflare Tunnel, Flask, Tor &amp; AES-GCM</p>
+  </header>
+
+  <!-- ============================================================
+  LANGUAGE TABS
+  ============================================================ -->
+  <div class="lang-tabs" id="langTabs">
+    <button class="lang-tab active" data-lang="en">🇬🇧 English</button>
+    <button class="lang-tab" data-lang="ja">🇯🇵 日本語</button>
+    <button class="lang-tab" data-lang="zh">🇨🇳 中文</button>
+  </div>
+
+  <!-- ============================================================
+  CONTENT
+  ============================================================ -->
+  <div id="contentContainer">
+
+    <!-- ============================================================
+    ENGLISH
+    ============================================================ -->
+    <div class="lang-content" data-lang="en">
+      <div class="card">
+
+        <!-- How to Use -->
+        <div class="section">
+          <h2 class="section-title"><i class="fas fa-rocket"></i> How to Use</h2>
+
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Open Google Colab</h4>
+              <p>Open <a href="https://colab.research.google.com" target="_blank" class="text-link">Google Colab</a> and create a new notebook.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Copy the full code</h4>
+              <p>Copy the entire Python script (provided in the repository) into a single cell.</p>
+              <div class="code-block">
+                <span class="comment"># Paste the complete proxy system code here</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Change password hash</h4>
+              <p>This system uses <strong>SHA-3-256</strong> hashing. Replace the default hash with your own.</p>
+              <div class="code-block">
+                <span class="comment"># Generate new hash for your password (e.g., "mysecret")</span><br>
+                <span class="command">echo</span> -n <span class="string">"mysecret"</span> <span class="keyword">|</span> sha3sum -a 256
+              </div>
+              <p class="body-text-sm" style="margin-top:6px;">Then update <code>EXPECTED_HASH</code> in the code.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Kill all processes (stop)</h4>
+              <p>To stop everything, run this kill script in a new cell:</p>
+              <div class="code-block">
+                <span class="command">!pkill</span> -9 -f cloudflared<br>
+                <span class="command">!pkill</span> -9 -f <span class="string">"python.*app.py"</span><br>
+                <span class="command">!pkill</span> -9 -f tor
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Run &amp; verify</h4>
+              <p>After execution, check services are up:</p>
+              <ul style="list-style:none;padding:0;margin:6px 0 0 0;">
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!ps aux | grep tor</span> – check Tor</li>
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!ps aux | grep "python.*app.py"</span> – check Flask</li>
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!cat /content/tunnel.log</span> – get Cloudflare Tunnel URL</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security & Anonymity -->
+        <div class="section">
+          <h2 class="section-title"><i class="fas fa-shield-alt"></i> Security &amp; Anonymity</h2>
+
+          <div class="grid-2">
+            <div class="grid-item">
+              <h4><i class="fas fa-check-circle icon-green"></i> What is protected?</h4>
+              <ul>
+                <li>Destination URLs &amp; search queries (AES-GCM encryption)</li>
+                <li>DNS leaks prevented (socks5h://)</li>
+                <li>Internal network / metadata protected (SSRF filtering)</li>
+                <li>Session token authentication (SHA-3 password)</li>
+                <li>Redirect chain validation</li>
+              </ul>
+            </div>
+            <div class="grid-item">
+              <h4><i class="fas fa-eye-slash icon-purple"></i> What is <span style="font-style:italic;">not</span> hidden?</h4>
+              <ul>
+                <li>Domain of the proxy (trycloudflare.com)</li>
+                <li>Traffic volume &amp; timing</li>
+                <li>Cloudflare / Google metadata (IP, timestamps)</li>
+                <li>Tor exit node may see unencrypted HTTP</li>
+                <li>Fingerprinting by DPI</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="alert">
+            <h4><i class="fas fa-triangle-exclamation"></i> Can it bypass national firewalls (e.g., GFW)?</h4>
+            <ul>
+              <li><span class="highlight">Can bypass:</span> Basic tracking, content filtering based on keywords, ISP surveillance (traffic content hidden).</li>
+              <li><span class="highlight">Cannot bypass:</span> Deep Packet Inspection (DPI) that recognizes Tor/Cloudflare patterns; IP/domain blacklisting of known proxy services; active probing (if the firewall blocks Tor bridges).</li>
+            </ul>
+            <p style="font-size:14px;color:#78350f;margin-top:8px;">
+              🔹 For higher resilience, consider using <strong>WebTunnel</strong> bridges, custom domains, or VLESS+REALITY.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================
+    JAPANESE
+    ============================================================ -->
+    <div class="lang-content hidden" data-lang="ja">
+      <div class="card">
+
+        <div class="section">
+          <h2 class="section-title"><i class="fas fa-rocket"></i> 使い方</h2>
+
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Google Colab を開く</h4>
+              <p><a href="https://colab.research.google.com" target="_blank" class="text-link">Google Colab</a> を開き、新しいノートブックを作成します。</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>コードをコピー</h4>
+              <p>完全なPythonスクリプトを1つのセルに貼り付けます。</p>
+              <div class="code-block">
+                <span class="comment"># ここに完全なプロキシシステムのコードを貼り付け</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>パスワードハッシュを変更</h4>
+              <p>このシステムは <strong>SHA-3-256</strong> を使用します。デフォルトのハッシュを自分のものに置き換えてください。</p>
+              <div class="code-block">
+                <span class="comment"># 新しいパスワード（例："mysecret"）のハッシュを生成</span><br>
+                <span class="command">echo</span> -n <span class="string">"mysecret"</span> <span class="keyword">|</span> sha3sum -a 256
+              </div>
+              <p class="body-text-sm" style="margin-top:6px;">次に <code>EXPECTED_HASH</code> を更新します。</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>停止用スクリプト</h4>
+              <p>全てを停止するには、新しいセルで以下を実行：</p>
+              <div class="code-block">
+                <span class="command">!pkill</span> -9 -f cloudflared<br>
+                <span class="command">!pkill</span> -9 -f <span class="string">"python.*app.py"</span><br>
+                <span class="command">!pkill</span> -9 -f tor
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>実行と確認</h4>
+              <ul style="list-style:none;padding:0;margin:6px 0 0 0;">
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!ps aux | grep tor</span> – Tor 確認</li>
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!ps aux | grep "python.*app.py"</span> – Flask 確認</li>
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!cat /content/tunnel.log</span> – Cloudflare Tunnel URL 取得</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><i class="fas fa-shield-alt"></i> セキュリティと匿名性</h2>
+
+          <div class="grid-2">
+            <div class="grid-item">
+              <h4><i class="fas fa-check-circle icon-green"></i> 保護されるもの</h4>
+              <ul>
+                <li>アクセス先URL・検索クエリ（AES-GCM暗号化）</li>
+                <li>DNS漏洩防止（socks5h://）</li>
+                <li>内部ネットワーク・メタデータ保護（SSRFフィルタ）</li>
+                <li>セッショントークン認証（SHA-3パスワード）</li>
+                <li>リダイレクトチェーン検証</li>
+              </ul>
+            </div>
+            <div class="grid-item">
+              <h4><i class="fas fa-eye-slash icon-purple"></i> 隠せないもの</h4>
+              <ul>
+                <li>プロキシのドメイン（trycloudflare.com）</li>
+                <li>通信量・タイミング</li>
+                <li>Cloudflare/Googleのメタデータ（IP, 時刻）</li>
+                <li>Tor出口ノードでの平文HTTP</li>
+                <li>DPIによるフィンガープリント</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="alert">
+            <h4><i class="fas fa-triangle-exclamation"></i> 国家レベルのファイアウォールは突破できるか？</h4>
+            <ul>
+              <li><span class="highlight">突破可能：</span>キーワードフィルタリング、ISP監視（コンテンツは隠蔽）</li>
+              <li><span class="highlight">突破困難：</span>DPI（Tor/Cloudflareパターン検出）、既知プロキシのIP/ドメインブラックリスト、能動的プロービング（Torブリッジがブロックされた場合）</li>
+            </ul>
+            <p style="font-size:14px;color:#78350f;margin-top:8px;">
+              🔹 より高い耐性を得るには、<strong>WebTunnel</strong>ブリッジ、カスタムドメイン、VLESS+REALITYの導入を検討してください。
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================
+    CHINESE
+    ============================================================ -->
+    <div class="lang-content hidden" data-lang="zh">
+      <div class="card">
+
+        <div class="section">
+          <h2 class="section-title"><i class="fas fa-rocket"></i> 如何使用</h2>
+
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>打开 Google Colab</h4>
+              <p>打开 <a href="https://colab.research.google.com" target="_blank" class="text-link">Google Colab</a> 并创建一个新笔记本。</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>复制代码</h4>
+              <p>将完整的 Python 脚本粘贴到一个单元格中。</p>
+              <div class="code-block">
+                <span class="comment"># 在此粘贴完整的代理系统代码</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>修改密码哈希</h4>
+              <p>该系统使用 <strong>SHA-3-256</strong> 哈希。将默认哈希替换为您自己的。</p>
+              <div class="code-block">
+                <span class="comment"># 生成新密码（例如 "mysecret"）的哈希</span><br>
+                <span class="command">echo</span> -n <span class="string">"mysecret"</span> <span class="keyword">|</span> sha3sum -a 256
+              </div>
+              <p class="body-text-sm" style="margin-top:6px;">然后更新代码中的 <code>EXPECTED_HASH</code>。</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>停止所有进程</h4>
+              <p>要停止一切，在新的单元格中运行：</p>
+              <div class="code-block">
+                <span class="command">!pkill</span> -9 -f cloudflared<br>
+                <span class="command">!pkill</span> -9 -f <span class="string">"python.*app.py"</span><br>
+                <span class="command">!pkill</span> -9 -f tor
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>运行并验证</h4>
+              <ul style="list-style:none;padding:0;margin:6px 0 0 0;">
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!ps aux | grep tor</span> – 检查 Tor</li>
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!ps aux | grep "python.*app.py"</span> – 检查 Flask</li>
+                <li style="font-size:14px;color:#4a4a4a;padding:2px 0;"><span style="font-family:monospace;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:13px;">!cat /content/tunnel.log</span> – 获取 Cloudflare Tunnel URL</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><i class="fas fa-shield-alt"></i> 安全与匿名性</h2>
+
+          <div class="grid-2">
+            <div class="grid-item">
+              <h4><i class="fas fa-check-circle icon-green"></i> 受保护的内容</h4>
+              <ul>
+                <li>目标URL和搜索查询（AES-GCM加密）</li>
+                <li>防止DNS泄露（socks5h://）</li>
+                <li>内部网络/元数据保护（SSRF过滤）</li>
+                <li>会话令牌认证（SHA-3密码）</li>
+                <li>重定向链验证</li>
+              </ul>
+            </div>
+            <div class="grid-item">
+              <h4><i class="fas fa-eye-slash icon-purple"></i> 无法隐藏的内容</h4>
+              <ul>
+                <li>代理域名（trycloudflare.com）</li>
+                <li>流量大小和时间</li>
+                <li>Cloudflare/Google的元数据（IP、时间戳）</li>
+                <li>Tor出口节点可能看到未加密的HTTP</li>
+                <li>DPI指纹识别</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="alert">
+            <h4><i class="fas fa-triangle-exclamation"></i> 能否绕过国家级防火墙（例如GFW）？</h4>
+            <ul>
+              <li><span class="highlight">可以绕过：</span>基本跟踪、基于关键词的内容过滤、ISP监控（内容被隐藏）</li>
+              <li><span class="highlight">难以绕过：</span>深度包检测（识别Tor/Cloudflare模式）、已知代理的IP/域名黑名单、主动探测（如果Tor桥被封锁）</li>
+            </ul>
+            <p style="font-size:14px;color:#78350f;margin-top:8px;">
+              🔹 要获得更高的抗性，请考虑使用 <strong>WebTunnel</strong> 桥接、自定义域名或 VLESS+REALITY。
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+  FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <p>© 2025 – Secure Proxy System · Built with ❤️ and <span class="mono">Tor + Flask + Cloudflare</span></p>
+  </footer>
+
+</div>
+
+<!-- ============================================================
+LANGUAGE SWITCHER
+============================================================ -->
+<script>
+  (function() {
+    const tabs = document.querySelectorAll('.lang-tab');
+    const contents = document.querySelectorAll('.lang-content');
+
+    function switchLang(lang) {
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.lang === lang);
+      });
+      contents.forEach(content => {
+        content.classList.toggle('hidden', content.dataset.lang !== lang);
+      });
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        switchLang(this.dataset.lang);
+      });
+    });
+
+    // default: English (already active)
+  })();
+</script>
+
+</body>
+</html>
