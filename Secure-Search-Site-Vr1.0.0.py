@@ -1,7 +1,7 @@
 # ============================================================
-# SSS is Start now
+# SSS(Secure-Search-Site) Vr1.0.0 released!!!!
 # ============================================================
-print("SSS Vr1.0.0")
+print("SSS(Secure-Search-Site) Vr1.0.0")
 # 1. install
 !apt-get update -qq && apt-get install -y -qq tor
 !pip install flask requests requests[socks] cryptography -q
