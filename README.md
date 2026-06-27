@@ -6,5 +6,5 @@ A private web proxy powered by Cloudflare Tunnel, Flask, and Tor, with encrypted
 https://y-redhat.github.io/Secure-Search-Site/
 
 # Important
-These models are still under development. They may contain vulnerabilities that have not yet been fixed.
+These models(Vr1.0.0 and Vr2.0.0)are still under development. They may contain vulnerabilities that have not yet been fixed.
 Please exercise caution when using them.
