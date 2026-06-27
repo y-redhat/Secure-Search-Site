@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
+# ===================================================================
+# SSS(Secure-Search-Site) Secure Proxy System Vr1.0.0 released!!!!
+# ===================================================================
 import os
 import time
 import secrets
