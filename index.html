@@ -521,11 +521,29 @@
               <p>This system uses <strong>SHA-3-256</strong> hashing. Replace the default hash with your own.</p>
               <div class="code-block">
                 <span class="comment"># Generate new hash for your password (e.g., "mysecret")</span><br>
-                <span class="command">echo</span> -n <span class="string">"mysecret"</span> <span class="keyword">|</span> sha3sum -a 256
+                <div class="code-line">
+                <span class="keyword">import</span>
+                <span class="command">hashlib</span>
               </div>
-              <p class="body-text-sm" style="margin-top:6px;">Then update <code>EXPECTED_HASH</code> in the code.</p>
-            </div>
-          </div>
+
+              <div class="code-line">
+                <span class="variable">text</span>
+                <span class="keyword">=</span>
+                <span class="string">"qwan12321"</span>
+              </div>
+
+              <div class="code-line">
+                <span class="variable">hash_value</span>
+                <span class="keyword">=</span>
+                 <span class="command">hashlib.sha3_256</span><span class="keyword">(</span><span class="variable">text</span><span class="keyword">.</span><span class="command">encode</span><span class="keyword">())</span><span class="keyword">.</span><span class="command">hexdigest</span><span class="keyword">()</span>
+              </div>
+
+              <div class="code-line">
+                <span class="command">print</span><span class="keyword">(</span><span class="variable">hash_value</span><span class="keyword">)</span>
+                </div>
+                <p class="body-text-sm" style="margin-top:6px;">Then update <code>EXPECTED_HASH</code> in the code.</p>
+                      </div>
+             </div>
 
           <div class="step">
             <div class="step-number">4</div>
