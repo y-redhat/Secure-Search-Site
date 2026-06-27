@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-# ===================================================================
-# SSS(Secure-Search-Site) Secure Proxy System Vr2.0.0 released!!!!
-# ===================================================================
-"""
+
 
 import os
 import time
@@ -23,12 +19,8 @@ import requests
 import bcrypt
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-# ===================================================================
-# 1. 設定
-# ===================================================================
 app = Flask(__name__)
 
-# レート制限（メモリストレージ）
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
@@ -37,37 +29,27 @@ limiter = Limiter(
     strategy="fixed-window"
 )
 
-# パスワードハッシュ (bcrypt) — デフォルト: "SecureSearch123!"
-# 本番運用時は必ず環境変数 SSS_PASSWORD_HASH を設定してください
 DEFAULT_PASSWORD_HASH = "$2b$12$.5bUNJ1lY9/9mYRUygb/M.6f3.NBjU.Jx9qtUD6pg7Ia2v6KJueWi"
 PASSWORD_HASH = os.environ.get("SSS_PASSWORD_HASH", DEFAULT_PASSWORD_HASH).encode()
 
-_TOKEN_EXPIRE = 3600          # トークン有効期限（秒）
-_MAX_REDIRECTS = 5            # 最大リダイレクト追跡回数
-_MAX_BODY_SIZE = 1024 * 1024  # 1MB
+_TOKEN_EXPIRE = 3600
+_MAX_REDIRECTS = 5
+_MAX_BODY_SIZE = 1024 * 1024
 
-# Tor SOCKS5 Proxy
 _PROXIES = {
     "http": "socks5h://127.0.0.1:9050",
     "https": "socks5h://127.0.0.1:9050"
 }
 
-# セッションデータ: {token: {"exp": float, "key": bytes}}
 _sessions = {}
 
-# ===================================================================
-# 2. ユーティリティ
-# ===================================================================
-
 def _gen_session():
-    """新規セッションを生成し、トークンと暗号鍵を返す"""
     token = secrets.token_urlsafe(32)
     key = AESGCM.generate_key(bit_length=256)
     _sessions[token] = {"exp": time.time() + _TOKEN_EXPIRE, "key": key}
     return token, key
 
 def _get_session(token):
-    """トークンを検証し、セッションデータを返す（無効ならNone）"""
     if not token:
         return None
     sess = _sessions.get(token)
@@ -79,7 +61,6 @@ def _get_session(token):
     return sess
 
 def _auth_required(f):
-    """Bearerトークン認証デコレーター"""
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.headers.get("Authorization", "")
@@ -94,10 +75,6 @@ def _auth_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# ===================================================================
-# 3. URL検証（SSRF対策）
-# ===================================================================
-
 _ALLOWED_SCHEMES = {"http", "https"}
 _BLOCKED_HOSTS = {
     "localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]",
@@ -106,7 +83,6 @@ _BLOCKED_HOSTS = {
 }
 
 def _is_private_ip(host):
-    """プライベート/ループバック/リンクローカルIPかを判定"""
     try:
         ip = ipaddress.ip_address(host)
         return ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast
@@ -114,10 +90,6 @@ def _is_private_ip(host):
         return False
 
 def _validate_url(url: str) -> str | None:
-    """
-    URLを検証し、問題があればエラーメッセージを返す。
-    None なら検証通過。
-    """
     if not url or len(url) > 2048:
         return "Invalid URL"
     parsed = urlparse(url)
@@ -131,17 +103,12 @@ def _validate_url(url: str) -> str | None:
         return "Access-denied host"
     if _is_private_ip(host):
         return "Access to private IPs is prohibited."
-    # ポート番号の極端な制限（例: 22, 3389 など）
     port = parsed.port
     if port and port in {22, 23, 25, 53, 110, 143, 3389, 5432, 6379, 3306, 27017, 9200}:
         return "Access to restricted port is prohibited."
     return None
 
 def _safe_fetch(url: str):
-    """
-    allow_redirects=False でリクエストを行い、
-    リダイレクトは手動で追跡し、毎回 _validate_url で再検証する。
-    """
     current_url = url
     for redirect_count in range(_MAX_REDIRECTS):
         err = _validate_url(current_url)
@@ -167,12 +134,10 @@ def _safe_fetch(url: str):
             app.logger.error(f"[E] {e}")
             return None, "Internal error", 500
 
-        # リダイレクト応答の処理
         if resp.status_code in (301, 302, 303, 307, 308):
             location = resp.headers.get("Location")
             if not location:
                 return None, "Invalid redirect", 400
-            # 相対URLを絶対URLに解決
             current_url = urljoin(current_url, location)
             continue
 
@@ -180,14 +145,9 @@ def _safe_fetch(url: str):
 
     return None, "Too many redirects", 400
 
-# ===================================================================
-# 4. ルート
-# ===================================================================
-
 @app.route("/login", methods=["POST"])
 @limiter.limit("5 per minute")
 def login():
-    """bcryptによるパスワード検証 + セッション鍵発行"""
     data = request.get_json()
     if not data or "password" not in data:
         return "No password", 400
@@ -206,7 +166,6 @@ def ping():
 @app.route("/get_key", methods=["GET"])
 @_auth_required
 def get_key():
-    """セッション固有の暗号鍵を配布（SSL検査環境下でもURL暗号化を可能に）"""
     key = request._sess["key"]
     return jsonify({"key": base64.b64encode(key).decode()})
 
@@ -214,17 +173,12 @@ def get_key():
 @_auth_required
 @limiter.limit("30 per minute")
 def fetch():
-    """
-    クライアントから暗号化されたURLを受け取り、復号・検証後にTor経由で取得。
-    レスポンスもAES-GCMで暗号化して返す（SSL検査対策）。
-    """
     data = request.get_json()
     if not data or "data" not in data:
         return "Invalid request", 400
 
     key = request._sess["key"]
 
-    # --- 復号 ---
     try:
         raw = base64.b64decode(data["data"])
         if len(raw) < 13:
@@ -237,14 +191,11 @@ def fetch():
         app.logger.warning(f"[D] Decrypt error: {e}")
         return "Decryption error", 400
 
-    # --- 安全なフェッチ ---
     resp, err_msg, status = _safe_fetch(target)
     if err_msg:
         return err_msg, status
 
-    # --- HTML加工 ---
     html = resp.text
-    # base href を挿入して相対リンクを補正
     if "<head>" in html.lower():
         html = re.sub(
             r"<head>",
@@ -264,7 +215,6 @@ def fetch():
     else:
         html = f'<base href="{target}">' + html
 
-    # --- レスポンス暗号化 ---
     try:
         iv_r = os.urandom(12)
         aes_r = AESGCM(key)
@@ -278,7 +228,6 @@ def fetch():
 
 @app.route("/")
 def index():
-    """シングルページアプリケーション（認証 + プロキシブラウザ）"""
     return """<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -442,10 +391,6 @@ _I.addEventListener('keydown', e => { if (e.key === 'Enter') _load(); });
 </body>
 </html>"""
 
-# ===================================================================
-# 5. セキュリティヘッダー
-# ===================================================================
-
 @app.after_request
 def add_security_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
@@ -462,10 +407,6 @@ def add_security_headers(response):
     response.headers["Referrer-Policy"] = "no-referrer"
     return response
 
-# ===================================================================
-# 6. エラーハンドリング（本番では詳細を隠蔽）
-# ===================================================================
-
 @app.errorhandler(429)
 def ratelimit_handler(e):
     return "Rate limit exceeded", 429
@@ -475,11 +416,7 @@ def internal_error(e):
     app.logger.error(f"Server Error: {e}")
     return "Internal Server Error", 500
 
-# ===================================================================
-# 7. 起動
-# ===================================================================
-
 if __name__ == "__main__":
-    # 本番環境では Gunicorn + Nginx を使用してください。
-    # ここでは単体テスト用。
+    # For production, use Gunicorn + Nginx.
+    # This is for standalone testing only.
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
