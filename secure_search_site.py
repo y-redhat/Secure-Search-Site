@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SSS (Secure-Search-Site) Secure Proxy System V2.0.0
-- SSRF対策: allow_redirects=False + リダイレクト先再検証
-- レート制限: Flask-Limiter
-- 暗号化強化: セッション毎鍵 + レスポンス暗号化 + bcrypt認証
+# ===================================================================
+# SSS(Secure-Search-Site) Secure Proxy System Vr1.0.0 released!!!!
+# ===================================================================
 """
 
 import os
