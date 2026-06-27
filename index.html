@@ -4,153 +4,497 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Secure Proxy System – How to Use</title>
+
+  <!-- Inter Font (Mobbin standard) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ============================================================
+       Mobbin-inspired Design System
+       Based on: https://tessl.io/registry/skills/github/ihlamury/design-skills/mobbin-ui-skills
+       ============================================================ */
+
+    /* ----- Reset & Base ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f8fafc; color: #1b1b1b; line-height: 1.6; -webkit-font-smoothing: antialiased;
+      background: #f8fafc;
+      color: #1b1b1b;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
-    .container { max-width: 960px; margin: 0 auto; padding: 48px 24px; }
-    .heading-1 { font-size: 75px; font-weight: 700; line-height: 1.1; color: #1b1b1b; text-wrap: balance; }
-    .heading-2 { font-size: 28px; font-weight: 600; color: #1b1b1b; text-wrap: balance; }
-    .heading-3 { font-size: 18px; font-weight: 600; color: #1b1b1b; }
-    .body-text { font-size: 16px; font-weight: 400; color: #4a4a4a; text-wrap: pretty; }
-    .body-text-sm { font-size: 14px; font-weight: 400; color: #6b7280; text-wrap: pretty; }
-    .text-link { color: #2563eb; text-decoration: none; font-weight: 500; transition: color 0.15s; }
-    .text-link:hover { color: #1d4ed8; text-decoration: underline; }
-    .header { text-align: center; margin-bottom: 48px; }
+
+    /* ----- Container ----- */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* ----- Typography (Mobbin tokens) ----- */
+    .heading-1 {
+      font-size: 75px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #1b1b1b;
+      text-wrap: balance;
+    }
+
+    .heading-2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #1b1b1b;
+      text-wrap: balance;
+    }
+
+    .heading-3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1b1b1b;
+    }
+
+    .body-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: #4a4a4a;
+      text-wrap: pretty;
+    }
+
+    .body-text-sm {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6b7280;
+      text-wrap: pretty;
+    }
+
+    .text-muted {
+      color: #939393;
+    }
+
+    .text-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .text-link:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* ----- Header ----- */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
     .header .badge {
-      display: inline-block; background: #eef2ff; color: #4f46e5; font-size: 13px;
-      font-weight: 600; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 0.3px;
+      display: inline-block;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
     }
-    .header .subtitle { font-size: 18px; font-weight: 400; color: #6b7280; margin-top: 8px; }
+
+    .header .subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    /* ----- Language Tabs (Mobbin style) ----- */
     .lang-tabs {
-      display: flex; justify-content: center; gap: 4px; margin-bottom: 40px;
-      background: #f1f5f9; padding: 4px; border-radius: 12px;
-      max-width: 420px; margin-left: auto; margin-right: auto;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 40px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
     }
+
     .lang-tab {
-      padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
-      color: #6b7280; cursor: pointer; transition: all 0.2s ease; border: none;
-      background: transparent; font-family: 'Inter', sans-serif;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
     }
-    .lang-tab:hover { color: #1b1b1b; background: rgba(255,255,255,0.6); }
-    .lang-tab.active { background: #ffffff; color: #1b1b1b; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+    .lang-tab:hover {
+      color: #1b1b1b;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .lang-tab.active {
+      background: #ffffff;
+      color: #1b1b1b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ----- Card (Mobbin surface-raised) ----- */
     .card {
-      background: #ffffff; border-radius: 16px; padding: 40px 48px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
-      transition: box-shadow 0.2s ease; border: 1px solid #f1f5f9;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: box-shadow 0.2s ease;
+      border: 1px solid #f1f5f9;
     }
-    .card:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03); }
-    .section { margin-top: 40px; }
-    .section:first-of-type { margin-top: 0; }
+
+    .card:hover {
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+
+    /* ----- Section ----- */
+    .section {
+      margin-top: 40px;
+    }
+
+    .section:first-of-type {
+      margin-top: 0;
+    }
+
     .section-title {
-      display: flex; align-items: center; gap: 12px; font-size: 24px;
-      font-weight: 600; color: #1b1b1b; margin-bottom: 20px;
-      border-bottom: 1px solid #f1f5f9; padding-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 16px;
     }
-    .section-title i { color: #4f46e5; font-size: 22px; }
-    .step { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f8fafc; }
-    .step:last-child { border-bottom: none; }
+
+    .section-title i {
+      color: #4f46e5;
+      font-size: 22px;
+    }
+
+    /* ----- Step (4px grid spacing) ----- */
+    .step {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #f8fafc;
+    }
+
+    .step:last-child {
+      border-bottom: none;
+    }
+
     .step-number {
-      flex-shrink: 0; width: 32px; height: 32px; background: #eef2ff;
-      color: #4f46e5; font-weight: 700; font-size: 14px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
     }
-    .step-content { flex: 1; }
-    .step-content h4 { font-size: 16px; font-weight: 600; color: #1b1b1b; margin-bottom: 4px; }
-    .step-content p { font-size: 15px; color: #4a4a4a; margin: 0; }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 15px;
+      color: #4a4a4a;
+      margin: 0;
+    }
+
+    /* ----- Code Block (Mobbin style) ----- */
     .code-block {
-      background: #1e293b; color: #e2e8f0; padding: 16px 20px; border-radius: 8px;
-      overflow-x: auto; font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 13px; line-height: 1.7; margin-top: 8px; border: 1px solid #334155;
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 8px;
+      border: 1px solid #334155;
     }
-    .code-block pre {
-      margin: 0; background: transparent; color: inherit;
-      font-family: inherit; font-size: inherit; line-height: inherit;
-      white-space: pre-wrap; word-break: break-word;
+
+    .code-block .comment {
+      color: #94a3b8;
     }
-    .code-block .comment { color: #94a3b8; }
-    .code-block .keyword { color: #f472b6; }
-    .code-block .string { color: #34d399; }
-    .code-block .command { color: #60a5fa; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+
+    .code-block .keyword {
+      color: #f472b6;
+    }
+
+    .code-block .string {
+      color: #34d399;
+    }
+
+    .code-block .command {
+      color: #60a5fa;
+    }
+
+    /* ----- Grid Layout (Security section) ----- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
     .grid-item {
-      background: #f8fafc; border-radius: 12px; padding: 20px 24px; border: 1px solid #f1f5f9;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #f1f5f9;
     }
+
     .grid-item h4 {
-      font-size: 15px; font-weight: 600; color: #1b1b1b; margin-bottom: 8px;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .grid-item h4 .icon-green { color: #22c55e; }
-    .grid-item h4 .icon-purple { color: #8b5cf6; }
-    .grid-item ul { list-style: none; padding: 0; margin: 0; }
+
+    .grid-item h4 .icon-green {
+      color: #22c55e;
+    }
+
+    .grid-item h4 .icon-purple {
+      color: #8b5cf6;
+    }
+
+    .grid-item ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
     .grid-item ul li {
-      font-size: 14px; color: #4a4a4a; padding: 3px 0; padding-left: 20px; position: relative;
+      font-size: 14px;
+      color: #4a4a4a;
+      padding: 3px 0;
+      padding-left: 20px;
+      position: relative;
     }
-    .grid-item ul li::before { content: "•"; position: absolute; left: 0; color: #94a3b8; }
+
+    .grid-item ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #94a3b8;
+    }
+
+    /* ----- Alert Box (Mobbin style) ----- */
     .alert {
-      background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;
-      padding: 20px 24px; margin-top: 20px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 20px;
     }
+
     .alert h4 {
-      font-size: 15px; font-weight: 600; color: #92400e;
-      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    .alert h4 i { color: #d97706; }
-    .alert ul { list-style: none; padding: 0; margin: 0; }
+
+    .alert h4 i {
+      color: #d97706;
+    }
+
+    .alert ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
     .alert ul li {
-      font-size: 14px; color: #78350f; padding: 2px 0; padding-left: 20px; position: relative;
+      font-size: 14px;
+      color: #78350f;
+      padding: 2px 0;
+      padding-left: 20px;
+      position: relative;
     }
-    .alert ul li::before { content: "•"; position: absolute; left: 0; color: #d97706; }
-    .alert .highlight { font-weight: 600; color: #78350f; }
+
+    .alert ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #d97706;
+    }
+
+    .alert .highlight {
+      font-weight: 600;
+      color: #78350f;
+    }
+
+    /* ----- Footer ----- */
     .footer {
-      text-align: center; margin-top: 48px; padding-top: 24px;
-      border-top: 1px solid #f1f5f9; font-size: 14px; color: #94a3b8;
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 14px;
+      color: #94a3b8;
     }
-    .footer .mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #6b7280; }
-    .lang-content.hidden { display: none; }
-    .lang-content:not(.hidden) { display: block; }
+
+    .footer .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* ----- Utilities (hidden for language switcher) ----- */
+    .lang-content.hidden {
+      display: none;
+    }
+
+    .lang-content:not(.hidden) {
+      display: block;
+    }
+
+    /* ----- Responsive ----- */
     @media (max-width: 768px) {
-      .container { padding: 24px 16px; }
-      .card { padding: 24px 20px; }
-      .heading-1 { font-size: 40px; }
-      .heading-2 { font-size: 22px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .step { gap: 12px; }
-      .lang-tabs { max-width: 100%; gap: 2px; }
-      .lang-tab { padding: 6px 12px; font-size: 13px; }
-      .code-block { font-size: 12px; padding: 12px 14px; }
+      .container {
+        padding: 24px 16px;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+
+      .heading-1 {
+        font-size: 40px;
+      }
+
+      .heading-2 {
+        font-size: 22px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        gap: 12px;
+      }
+
+      .lang-tabs {
+        max-width: 100%;
+        gap: 2px;
+      }
+
+      .lang-tab {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+
+      .code-block {
+        font-size: 12px;
+        padding: 12px 14px;
+      }
     }
+
     @media (max-width: 480px) {
-      .heading-1 { font-size: 32px; }
-      .step { flex-direction: column; gap: 6px; }
-      .step-number { width: 28px; height: 28px; font-size: 12px; }
+      .heading-1 {
+        font-size: 32px;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 <body>
+
 <div class="container">
+
+  <!-- ============================================================
+  HEADER
+  ============================================================ -->
   <header class="header">
     <div class="badge"><i class="fas fa-shield-alt" style="margin-right: 6px;"></i> Privacy First</div>
     <h1 class="heading-1">Secure Proxy System</h1>
     <p class="subtitle">Anonymous browsing powered by Cloudflare Tunnel, Flask, Tor &amp; AES-GCM</p>
   </header>
+
+  <!-- ============================================================
+  LANGUAGE TABS
+  ============================================================ -->
   <div class="lang-tabs" id="langTabs">
     <button class="lang-tab active" data-lang="en">🇬🇧 English</button>
     <button class="lang-tab" data-lang="ja">🇯🇵 日本語</button>
     <button class="lang-tab" data-lang="zh">🇨🇳 中文</button>
   </div>
+
+  <!-- ============================================================
+  CONTENT
+  ============================================================ -->
   <div id="contentContainer">
-    <!-- English -->
+
+    <!-- ============================================================
+    ENGLISH
+    ============================================================ -->
     <div class="lang-content" data-lang="en">
       <div class="card">
+
+        <!-- How to Use -->
         <div class="section">
           <h2 class="section-title"><i class="fas fa-rocket"></i> How to Use</h2>
+
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
@@ -158,14 +502,18 @@
               <p>Open <a href="https://colab.research.google.com" target="_blank" class="text-link">Google Colab</a> and create a new notebook.</p>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-content">
               <h4>Copy the full code</h4>
-              <p>Copy the entire Python script below into a single cell.</p>
-              <div class="code-block" id="code-en"><pre></pre></div>
+              <p>Copy the entire Python script (provided in the repository) into a single cell.</p>
+              <div class="code-block">
+                <span class="comment">Please download it using the https://github.com/y-redhat/Secure-Search-Site</span>
+              </div>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">3</div>
             <div class="step-content">
@@ -178,6 +526,7 @@
               <p class="body-text-sm" style="margin-top:6px;">Then update <code>EXPECTED_HASH</code> in the code.</p>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">4</div>
             <div class="step-content">
@@ -190,6 +539,7 @@
               </div>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">5</div>
             <div class="step-content">
@@ -203,8 +553,11 @@
             </div>
           </div>
         </div>
+
+        <!-- Security & Anonymity -->
         <div class="section">
           <h2 class="section-title"><i class="fas fa-shield-alt"></i> Security &amp; Anonymity</h2>
+
           <div class="grid-2">
             <div class="grid-item">
               <h4><i class="fas fa-check-circle icon-green"></i> What is protected?</h4>
@@ -227,6 +580,7 @@
               </ul>
             </div>
           </div>
+
           <div class="alert">
             <h4><i class="fas fa-triangle-exclamation"></i> Can it bypass national firewalls (e.g., GFW)?</h4>
             <ul>
@@ -238,13 +592,19 @@
             </p>
           </div>
         </div>
+
       </div>
     </div>
-    <!-- Japanese -->
+
+    <!-- ============================================================
+    JAPANESE
+    ============================================================ -->
     <div class="lang-content hidden" data-lang="ja">
       <div class="card">
+
         <div class="section">
           <h2 class="section-title"><i class="fas fa-rocket"></i> 使い方</h2>
+
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
@@ -252,14 +612,18 @@
               <p><a href="https://colab.research.google.com" target="_blank" class="text-link">Google Colab</a> を開き、新しいノートブックを作成します。</p>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-content">
               <h4>コードをコピー</h4>
-              <p>以下の完全なPythonスクリプトを1つのセルに貼り付けます。</p>
-              <div class="code-block" id="code-ja"><pre></pre></div>
+              <p>完全なPythonスクリプトを1つのセルに貼り付けます。</p>
+              <div class="code-block">
+                <span class="comment">https://github.com/y-redhat/Secure-Search-Siteからダウンロードしてください</span>
+              </div>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">3</div>
             <div class="step-content">
@@ -272,6 +636,7 @@
               <p class="body-text-sm" style="margin-top:6px;">次に <code>EXPECTED_HASH</code> を更新します。</p>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">4</div>
             <div class="step-content">
@@ -284,6 +649,7 @@
               </div>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">5</div>
             <div class="step-content">
@@ -296,8 +662,10 @@
             </div>
           </div>
         </div>
+
         <div class="section">
           <h2 class="section-title"><i class="fas fa-shield-alt"></i> セキュリティと匿名性</h2>
+
           <div class="grid-2">
             <div class="grid-item">
               <h4><i class="fas fa-check-circle icon-green"></i> 保護されるもの</h4>
@@ -320,6 +688,7 @@
               </ul>
             </div>
           </div>
+
           <div class="alert">
             <h4><i class="fas fa-triangle-exclamation"></i> 国家レベルのファイアウォールは突破できるか？</h4>
             <ul>
@@ -331,13 +700,19 @@
             </p>
           </div>
         </div>
+
       </div>
     </div>
-    <!-- Chinese -->
+
+    <!-- ============================================================
+    CHINESE
+    ============================================================ -->
     <div class="lang-content hidden" data-lang="zh">
       <div class="card">
+
         <div class="section">
           <h2 class="section-title"><i class="fas fa-rocket"></i> 如何使用</h2>
+
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
@@ -345,14 +720,18 @@
               <p>打开 <a href="https://colab.research.google.com" target="_blank" class="text-link">Google Colab</a> 并创建一个新笔记本。</p>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-content">
               <h4>复制代码</h4>
               <p>将完整的 Python 脚本粘贴到一个单元格中。</p>
-              <div class="code-block" id="code-zh"><pre></pre></div>
+              <div class="code-block">
+                <span class="comment">请从 https://github.com/y-redhat/Secure-Search-Site 下载代码</span>
+              </div>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">3</div>
             <div class="step-content">
@@ -365,6 +744,7 @@
               <p class="body-text-sm" style="margin-top:6px;">然后更新代码中的 <code>EXPECTED_HASH</code>。</p>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">4</div>
             <div class="step-content">
@@ -377,6 +757,7 @@
               </div>
             </div>
           </div>
+
           <div class="step">
             <div class="step-number">5</div>
             <div class="step-content">
@@ -389,8 +770,10 @@
             </div>
           </div>
         </div>
+
         <div class="section">
           <h2 class="section-title"><i class="fas fa-shield-alt"></i> 安全与匿名性</h2>
+
           <div class="grid-2">
             <div class="grid-item">
               <h4><i class="fas fa-check-circle icon-green"></i> 受保护的内容</h4>
@@ -413,6 +796,7 @@
               </ul>
             </div>
           </div>
+
           <div class="alert">
             <h4><i class="fas fa-triangle-exclamation"></i> 能否绕过国家级防火墙（例如GFW）？</h4>
             <ul>
@@ -424,48 +808,47 @@
             </p>
           </div>
         </div>
+
       </div>
     </div>
+
   </div>
+
+  <!-- ============================================================
+  FOOTER
+  ============================================================ -->
   <footer class="footer">
     <p>© 2025 – Secure Proxy System · Built with ❤️ and <span class="mono">Tor + Flask + Cloudflare</span></p>
   </footer>
+
 </div>
+
+<!-- ============================================================
+LANGUAGE SWITCHER
+============================================================ -->
 <script>
-(function() {
-  const PROXY_CODE_B64 = "IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KIyBTU1MgdjEuMC4wIC0gU2VjdXJlIFByb3h5IFN5c3RlbQojID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpwcmludCgiU1NTIHYxLjAuMCBzdGFydGluZy4uLiIpCgojIDEuIEluc3RhbGwgZGVwZW5kZW5jaWVzCiFhcHQtZ2V0IHVwZGF0ZSAtcXEgJiYgYXB0LWdldCBpbnN0YWxsIC15IC1xcSB0b3IKIXBpcCBpbnN0YWxsIGZsYXNrIHJlcXVlc3RzIHJlcXVlc3RzW3NvY2tzXSBjcnlwdG9ncmFwaHkgLXEKIXdnZXQgLXEgaHR0cHM6Ly9naXRodWIuY29tL2Nsb3VkZmxhcmUvY2xvdWRmbGFyZWQvcmVsZWFzZXMvbGF0ZXN0L2Rvd25sb2FkL2Nsb3VkZmxhcmVkLWxpbnV4LWFtZDY0IC1PIC9jb250ZW50L2Nsb3VkZmxhcmVkCiFjaG1vZCAreCAvY29udGVudC9jbG91ZGZsYXJlZApwcmludCgi4pyTIEluc3RhbGxhdGlvbiBjb21wbGV0ZSIpCgojIDIuIFN0YXJ0IFRvcgppbXBvcnQgb3MsIHN1YnByb2Nlc3MsIHRpbWUsIHNvY2tldCwgcmUsIGpzb24sIGJhc2U2NCwgc2VjcmV0cywgaGFzaGxpYiwgaXBhZGRyZXNzLCB0aHJlYWRpbmcKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybHBhcnNlCgpvcy5zeXN0ZW0oJ3BraWxsIC05IC1mIHRvcicpCnRpbWUuc2xlZXAoMSkKb3Muc3lzdGVtKCdybSAtcmYgL2NvbnRlbnQvdG9yX2RhdGEnKQpvcy5tYWtlZGlycygnL2NvbnRlbnQvdG9yX2RhdGEnLCBleGlzdF9vaz1UcnVlKQoKdG9ycmMgPSAiIiJTb2Nrc1BvcnQgMTI3LjAuMC4xOjkwNTAKRGF0YURpcmVjdG9yeSAvY29udGVudC90b3JfZGF0YQpFeGl0UG9saWN5IHJlamVjdCAqOioKTG9nIG5vdGljZSBmaWxlIC9jb250ZW50L3Rvcl9sb2cudHh0IiIiCndpdGggb3BlbignL2NvbnRlbnQvdG9ycmMnLCAndycpIGFzIGY6CiAgICBmLndyaXRlKHRvcnJjKQoKc3VicHJvY2Vzcy5Qb3BlbihbJ3RvcicsICctZicsICcvY29udGVudC90b3JyYyddLCBzdGRvdXQ9c3VicHJvY2Vzcy5QSVBFLCBzdGRlcnI9c3VicHJvY2Vzcy5QSVBFKQpwcmludCgiV2FpdGluZyBmb3IgVG9yLi4uIikKZm9yIGkgaW4gcmFuZ2UoMjApOgogICAgdGltZS5zbGVlcCgxKQogICAgc29jayA9IHNvY2tldC5zb2NrZXQoc29ja2V0LkFGX0lORVQsIHNvY2tldC5TT0NLX1NUUkVBTSkKICAgIGlmIHNvY2suY29ubmVjdF9leCgoJzEyNy4wLjAuMScsIDkwNTApKSA9PSAwOgogICAgICAgIHByaW50KCLinJMgVG9yIGlzIHJlYWR5IikKICAgICAgICBzb2NrLmNsb3NlKCkKICAgICAgICBicmVhawogICAgc29jay5jbG9zZSgpCmVsc2U6CiAgICByYWlzZSBSdW50aW1lRXJyb3IoIuKclyBUb3IgZmFpbGVkIHRvIHN0YXJ0IikKCiMgMy4gV3JpdGUgRmxhc2sgYXBwCmFwcF9jb2RlID0gciIiImltcG9ydCBqc29uLCBiYXNlNjQsIHJlLCBvcywgc2VjcmV0cywgdGltZQpmcm9tIGZsYXNrIGltcG9ydCBGbGFzaywgcmVxdWVzdCwgUmVzcG9uc2UsIGpzb25pZnkKaW1wb3J0IHJlcXVlc3RzCmZyb20gY3J5cHRvZ3JhcGh5Lmhhem1hdC5wcmltaXRpdmVzLmNpcGhlcnMuYWVhZCBpbXBvcnQgQUVTR0NNCmZyb20gdXJsbGliLnBhcnNlIGltcG9ydCB1cmxwYXJzZQppbXBvcnQgaXBhZGRyZXNzCmltcG9ydCBoYXNobGliCmZyb20gZnVuY3Rvb2xzIGltcG9ydCB3cmFwcwoKYXBwID0gRmxhc2soX19uYW1lX18pCgpFWFBFQ1RFRF9IQVNIID0gIj09PT09PT09PT09PXlvdXIgaGFzaCBoZXJlPT09PT09PT09PT09PT09IgoKX3Rva2VucyA9IHt9Cl9UT0tFTl9FWFBJUkUgPSAzNjAwCgpkZWYgX2dlbl90b2tlbigpOgogICAgdCA9IHNlY3JldHMudG9rZW5fdXJsc2FmZSgzMikKICAgIF90b2tlbnNbdF0gPSB7ICdleHAnOiB0aW1lLnRpbWUoKSArIF9UT0tFTl9FWFBJUkUsICd1JzogJ2F1dGgnIH0KICAgIHJldHVybiB0CgpkZWYgX3ZlcmlmeV90b2tlbih0ayk6CiAgICBpZiBub3QgdGs6IHJldHVybiBGYWxzZQogICAgZCA9IF90b2tlbnMuZ2V0KHRrKQogICAgaWYgbm90IGQ6IHJldHVybiBGYWxzZQogICAgaWYgdGltZS50aW1lKCkgPiBkWydleHAnXToKICAgICAgICBkZWwgX3Rva2Vuc1t0a10KICAgICAgICByZXR1cm4gRmFsc2UKICAgIHJldHVybiBUcnVlCgpkZWYgX2F1dGgoZik6CiAgICBAd3JhcHMoZikKICAgIGRlZiBkZWMoKmFyZ3MsICoqa3dhcmdzKToKICAgICAgICB0ayA9IHJlcXVlc3QuaGVhZGVycy5nZXQoJ0F1dGhvcml6YXRpb24nKQogICAgICAgIGlmIG5vdCB0azoKICAgICAgICAgICAgcmV0dXJuIFJlc3BvbnNlKCdVbmF1dGhvcml6ZWQnLCBzdGF0dXM9NDAxKQogICAgICAgIGlmIHRrLnN0YXJ0c3dpdGgoJ0JlYXJlciAnKToKICAgICAgICAgICAgdGsgPSB0a1s3Ol0KICAgICAgICBpZiBub3QgX3ZlcmlmeV90b2tlbih0ayk6CiAgICAgICAgICAgIHJldHVybiBSZXNwb25zZSgnVW5hdXRob3JpemVkJywgc3RhdHVzPTQwMSkKICAgICAgICByZXR1cm4gZigqYXJncywgKiprd2FyZ3MpCiAgICByZXR1cm4gZGVjCgpfQUxMT1dFRF9TQ0hFTUVTID0gKCdodHRwJywgJ2h0dHBzJykKX0JMT0NLRURfSE9TVFMgPSB7CiAgICAnbG9jYWxob3N0JywgJzEyNy4wLjAuMScsICcwLjAuMC4wJywKICAgICcxNjkuMjU0LjE2OS4yNTQnLCAnbWV0YWRhdGEuZ29vZ2xlLmludGVybmFsJywgJ2luc3RhbmNlLW1ldGFkYXRhJwp9CgpkZWYgX2lzX3ByaXZhdGVfaXAoaG9zdCk6CiAgICB0cnk6CiAgICAgICAgaXAgPSBpcGFkZHJlc3MuaXBfYWRkcmVzcyhob3N0KQogICAgICAgIHJldHVybiBpcC5pc19wcml2YXRlIG9yIGlwLmlzX2xvb3BiYWNrIG9yIGlwLmlzX2xpbmtfbG9jYWwKICAgIGV4Y2VwdCBWYWx1ZUVycm9yOgogICAgICAgIHJldHVybiBGYWxzZQoKZGVmIF92YWxpZGF0ZV91cmwodXJsKToKICAgIHBhcnNlZCA9IHVybHBhcnNlKHVybCkKICAgIGlmIHBhcnNlZC5zY2hlbWUgbm90IGluIF9BTExPV0VEX1NDSEVNRVM6CiAgICAgICAgcmV0dXJuIGYnRnJhdWR1bGVudCBzY2hlbWU6IHtwYXJzZWQuc2NoZW1lfScKICAgIGhvc3QgPSBwYXJzZWQuaG9zdG5hbWUgb3IgJycKICAgIGlmIG5vdCBob3N0OgogICAgICAgIHJldHVybiAnSW52YWxpZCBVUkwnCiAgICBpZiBob3N0IGluIF9CTE9DS0VEX0hPU1RTOgogICAgICAgIHJldHVybiAnQWNjZXNzLWRlbmllZCBob3N0JwogICAgaWYgX2lzX3ByaXZhdGVfaXAoaG9zdCk6CiAgICAgICAgcmV0dXJuICdBY2Nlc3MgdG8gcHJpdmF0ZSBJUHMgaXMgcHJvaGliaXRlZC4nCiAgICByZXR1cm4gTm9uZQoKX0tFWV9GSUxFID0gJy9jb250ZW50L3Nlc3Npb25fa2V5LmJpbicKaWYgb3MucGF0aC5leGlzdHMoX0tFWV9GSUxFKToKICAgIHdpdGggb3BlbihfS0VZX0ZJTEUsICdyYicpIGFzIGY6CiAgICAgICAgU0VTU0lPTl9LRVkgPSBmLnJlYWQoKQplbHNlOgogICAgU0VTU0lPTl9LRVkgPSBBRVNHQ00uZ2VuZXJhdGVfa2V5KGJpdF9sZW5ndGg9MjU2KQogICAgd2l0aCBvcGVuKF9LRVlfRklMRSwgJ3diJykgYXMgZjoKICAgICAgICBmLndyaXRlKFNFU1NJT05fS0VZKQoKX1BST1hJRVMgPSB7CiAgICAnaHR0cCc6ICdzb2NrczVoOi8vMTI3LjAuMC4xOjkwNTAnLAogICAgJ2h0dHBzJzogJ3NvY2tzNWg6Ly8xMjcuMC4wLjE6OTA1MCcKfQoKQGFwcC5yb3V0ZSgnL2xvZ2luJywgbWV0aG9kcz1bJ1BPU1QnXSkKZGVmIGxvZ2luKCk6CiAgICBkYXRhID0gcmVxdWVzdC5nZXRfanNvbigpCiAgICBpZiBub3QgZGF0YSBvciAncGFzc3dvcmQnIG5vdCBpbiBkYXRhOgogICAgICAgIHJldHVybiAnTm8gcGFzc3dvcmQnLCA0MDAKICAgIHB3ZCA9IGRhdGFbJ3Bhc3N3b3JkJ10KICAgIGhhc2hlZCA9IGhhc2hsaWIuc2hhM18yNTYocHdkLmVuY29kZSgndXRmLTgnKSkuaGV4ZGlnZXN0KCkKICAgIGlmIGhhc2hlZCA9PSBFWFBFQ1RFRF9IQVNIOgogICAgICAgIHRva2VuID0gX2dlbl90b2tlbigpCiAgICAgICAgcmV0dXJuIGpzb25pZnkoeydzdGF0dXMnOiAnc3VjY2VzcycsICd0b2tlbic6IHRva2VufSksIDIwMAogICAgZWxzZToKICAgICAgICByZXR1cm4gJ3dyb25nIHBhc3Mgd29yZCcsIDQwMQoKQGFwcC5yb3V0ZSgnL3BpbmcnLCBtZXRob2RzPVsnR0VUJ10pCmRlZiBwaW5nKCk6CiAgICByZXR1cm4gJ3BvbmcnCgpAYXBwLnJvdXRlKCcvZ2V0X2tleScsIG1ldGhvZHM9WydHRVQnXSkKQF9hdXRoCmRlZiBnZXRfa2V5KCk6CiAgICByZXR1cm4ganNvbmlmeSh7J2tleSc6IGJhc2U2NC5iNjRlbmNvZGUoU0VTU0lPTl9LRVkpLmRlY29kZSgpfSkKCkBhcHAucm91dGUoJy9mZXRjaCcsIG1ldGhvZHM9WydQT1NUJ10pCkBfYXV0aApkZWYgZmV0Y2hfdXJsKCk6CiAgICBkYXRhID0gcmVxdWVzdC5nZXRfanNvbigpCiAgICBpZiBub3QgZGF0YSBvciAnZGF0YScgbm90IGluIGRhdGE6CiAgICAgICAgcmV0dXJuICdObyBkYXRhJywgNDAwCiAgICB0cnk6CiAgICAgICAgcmF3ID0gYmFzZTY0LmI2NGRlY29kZShkYXRhWydkYXRhJ10pCiAgICAgICAgaXYgPSByYXdbOjEyXQogICAgICAgIGN0ID0gcmF3WzEyOl0KICAgICAgICBhZXNnY20gPSBBRVNHQ00oU0VTU0lPTl9LRVkpCiAgICAgICAgcHQgPSBhZXNnY20uZGVjcnlwdChpdiwgY3QsIE5vbmUpCiAgICAgICAgdXJsID0gcHQuZGVjb2RlKCd1dGYtOCcpCgogICAgICAgIGVyciA9IF92YWxpZGF0ZV91cmwodXJsKQogICAgICAgIGlmIGVycjoKICAgICAgICAgICAgcmV0dXJuIGVyciwgNDAwCgogICAgICAgIHJlc3AgPSByZXF1ZXN0cy5nZXQodXJsLCBwcm94aWVzPV9QUk9YSUVTLCB0aW1lb3V0PTMwLCBhbGxvd19yZWRpcmVjdHM9VHJ1ZSkKICAgICAgICByZXR1cm4gUmVzcG9uc2UocmVzcC50ZXh0LCBzdGF0dXM9cmVzcC5zdGF0dXNfY29kZSwgY29udGVudF90eXBlPXJlc3AuaGVhZGVycy5nZXQoJ0NvbnRlbnQtVHlwZScsICd0ZXh0L2h0bWwnKSkKICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToKICAgICAgICByZXR1cm4gc3RyKGUpLCA1MDAKCkBhcHAucm91dGUoJy8nKQpkZWYgaW5kZXgoKToKICAgIHJldHVybiAiIiI8IURPQ1RZUEUgaHRtbD4KPGh0bWw+CjxoZWFkPjxtZXRhIGNoYXJzZXQ9IlVURi04Ij48dGl0bGU+RGVlcFNlYXJjaCBCcm93c2VyPC90aXRsZT48L2hlYWQ+Cjxib2R5IHN0eWxlPSJtYXJnaW46MDtmb250LWZhbWlseTpzYW5zLXNlcmlmO2JhY2tncm91bmQ6IzFhMWEyZTtjb2xvcjojZmZmOyI+CiAgICA8ZGl2IGlkPSJMMSIgc3R5bGU9ImRpc3BsYXk6ZmxleDtmbGV4LWRpcmVjdGlvbjpjb2x1bW47YWxpZ24taXRlbXM6Y2VudGVyO2p1c3RpZnktY29udGVudDpjZW50ZXI7aGVpZ2h0OjEwMHZoO2JhY2tncm91bmQ6IzFhMWEyZTsiPgogICAgICAgIDxkaXYgc3R5bGU9ImJhY2tncm91bmQ6IzE2MjEzZTtwYWRkaW5nOjQwcHg7Ym9yZGVyLXJhZGl1czoxMnB4O2JveC1zaGFkb3c6MCA0cHggMjBweCByZ2JhKDAsMCwwLDAuMyk7dGV4dC1hbGlnbjpjZW50ZXI7Ij4KICAgICAgICAgICAgPGgyIHN0eWxlPSJtYXJnaW46MCAwIDIwcHg7Y29sb3I6I2U5NDU2MDsiPkF1dGhlbnRpY2F0aW9uIFJlcXVpcmVkPC9oMj4KICAgICAgICAgICAgPGlucHV0IGlkPSJJMSIgdHlwZT0icGFzc3dvcmQiIHBsYWNlaG9sZGVyPSJQYXNzd29yZCIgc3R5bGU9InBhZGRpbmc6MTJweCAxNnB4O2ZvbnQtc2l6ZToxNnB4O2JvcmRlcjpub25lO2JvcmRlci1yYWRpdXM6OHB4O2JhY2tncm91bmQ6IzBmMzQ2MDtjb2xvcjojZmZmO3dpZHRoOjI1MHB4O291dGxpbmU6bm9uZTttYXJnaW4tYm90dG9tOjE2cHg7ZGlzcGxheTpibG9jazsiPgogICAgICAgICAgICA8YnV0dG9uIGlkPSJCMSIgc3R5bGU9InBhZGRpbmc6MTJweCAzMnB4O2JhY2tncm91bmQ6I2U5NDU2MDtib3JkZXI6bm9uZTtib3JkZXItcmFkaXVzOjhweDtjb2xvcjojZmZmO2ZvbnQtc2l6ZToxNnB4O2ZvbnQtd2VpZ2h0OmJvbGQ7Y3Vyc29yOnBvaW50ZXI7Ij5Mb2dpbjwvYnV0dG9uPgogICAgICAgICAgICA8ZGl2IGlkPSJNMSIgc3R5bGU9Im1hcmdpbi10b3A6MTJweDtjb2xvcjojZTk0NTYwO2ZvbnQtc2l6ZToxNHB4O21pbi1oZWlnaHQ6MjBweDsiPjwvZGl2PgogICAgICAgIDwvZGl2PgogICAgPC9kaXY+CiAgICA8ZGl2IGlkPSJMMiIgc3R5bGU9ImRpc3BsYXk6bm9uZTsiPgogICAgICAgIDxkaXYgc3R5bGU9InBhZGRpbmc6MTZweCAyMHB4O2JhY2tncm91bmQ6IzE2MjEzZTtib3JkZXItYm90dG9tOjJweCBzb2xpZCAjMGYzNDYwO2Rpc3BsYXk6ZmxleDtnYXA6MTJweDtmbGV4LXdyYXA6d3JhcDsiPgogICAgICAgICAgICA8aW5wdXQgaWQ9IkkyIiB0eXBlPSJ0ZXh0IiBwbGFjZWhvbGRlcj0iRW50ZXIgVVJMIChlLmcuIGR1Y2tkdWNrZ28uY29tKSIgc3R5bGU9ImZsZXg6MTttaW4td2lkdGg6MjAwcHg7cGFkZGluZzoxMHB4IDE2cHg7Zm9udC1zaXplOjE1cHg7Ym9yZGVyOm5vbmU7Ym9yZGVyLXJhZGl1czo4cHg7YmFja2dyb3VuZDojMGYzNDYwO2NvbG9yOiNmZmY7b3V0bGluZTpub25lOyI+CiAgICAgICAgICAgIDxidXR0b24gaWQ9IkIyIiBzdHlsZT0icGFkZGluZzoxMHB4IDI4cHg7YmFja2dyb3VuZDojZTk0NTYwO2JvcmRlcjpub25lO2JvcmRlci1yYWRpdXM6OHB4O2NvbG9yOiNmZmY7Zm9udC1zaXplOjE1cHg7Zm9udC13ZWlnaHQ6Ym9sZDtjdXJzb3I6cG9pbnRlcjsiPkdvPC9idXR0b24+CiAgICAgICAgICAgIDxidXR0b24gaWQ9IkIzIiBzdHlsZT0icGFkZGluZzoxMHB4IDIwcHg7YmFja2dyb3VuZDojMGYzNDYwO2JvcmRlcjpub25lO2JvcmRlci1yYWRpdXM6OHB4O2NvbG9yOiNmZmY7Zm9udC1zaXplOjE1cHg7Y3Vyc29yOnBvaW50ZXI7Ij5Mb2dvdXQ8L2J1dHRvbj4KICAgICAgICAgICAgPHNwYW4gaWQ9IlMxIiBzdHlsZT0iZm9udC1zaXplOjEzcHg7Y29sb3I6IzRlY2RjNDsiPiZidWxsOyBSZWFkeTwvc3Bhbj4KICAgICAgICA8L2Rpdj4KICAgICAgICA8aWZyYW1lIGlkPSJGMSIgc3R5bGU9IndpZHRoOjEwMCU7aGVpZ2h0OmNhbGMoMTAwdmggLSA4MHB4KTtib3JkZXI6bm9uZTtiYWNrZ3JvdW5kOiNmZmY7Ij48L2lmcmFtZT4KICAgIDwvZGl2PgogICAgPHNjcmlwdD4KICAgIGNvbnN0IF9CID0gd2luZG93LmxvY2F0aW9uLm9yaWdpbjsKICAgIGNvbnN0IF9UID0gbG9jYWxTdG9yYWdlLmdldEl0ZW0oJ190Jyk7CiAgICBjb25zdCBfTDEgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnTDEnKTsKICAgIGNvbnN0IF9MMiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdMMicpOwogICAgY29uc3QgX00gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnTTEnKTsKCiAgICBpZiAoIV9UKSB7IF9MMS5zdHlsZS5kaXNwbGF5ID0gJ2ZsZXgnOyBfTDIuc3R5bGUuZGlzcGxheSA9ICdub25lJzsgfQogICAgZWxzZSB7IF9MMS5zdHlsZS5kaXNwbGF5ID0gJ25vbmUnOyBfTDIuc3R5bGUuZGlzcGxheSA9ICdibG9jayc7IH0KCiAgICBhc3luYyBmdW5jdGlvbiBfbG9naW4oKSB7CiAgICAgICAgY29uc3QgcCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdJMScpLnZhbHVlOwogICAgICAgIGNvbnN0IHIgPSBhd2FpdCBmZXRjaChfQiArICcvbG9naW4nLCB7CiAgICAgICAgICAgIG1ldGhvZDogJ1BPU1QnLAogICAgICAgICAgICBoZWFkZXJzOiB7J0NvbnRlbnQtVHlwZSc6J2FwcGxpY2F0aW9uL2pzb24nfSwKICAgICAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoe3Bhc3N3b3JkOiBwfSkKICAgICAgICB9KTsKICAgICAgICBpZiAoci5vaykgewogICAgICAgICAgICBjb25zdCBkID0gYXdhaXQgci5qc29uKCk7CiAgICAgICAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKCdfdCcsIGQudG9rZW4pOwogICAgICAgICAgICBsb2NhdGlvbi5yZWxvYWQoKTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBfTS50ZXh0Q29udGVudCA9ICdJbnZhbGlkIHBhc3N3b3JkJzsKICAgICAgICB9CiAgICB9CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnQjEnKS5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsIF9sb2dpbik7CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnSTEnKS5hZGRFdmVudExpc3RlbmVyKCdrZXlkb3duJywgZSA9PiB7IGlmKGUua2V5PT09J0VudGVyJykgX2xvZ2luKCk7IH0pOwogICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ0IzJykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKSA9PiB7CiAgICAgICAgbG9jYWxTdG9yYWdlLnJlbW92ZUl0ZW0oJ190Jyk7CiAgICAgICAgbG9jYXRpb24ucmVsb2FkKCk7CiAgICB9KTsKCiAgICBjb25zdCBfSSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdJMicpOwogICAgY29uc3QgX0YgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnRjEnKTsKICAgIGNvbnN0IF9TID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ1MxJyk7CiAgICBsZXQgX0sgPSBudWxsOwoKICAgIGZ1bmN0aW9uIF9oZWFkZXJzKGUpIHsKICAgICAgICBjb25zdCBoID0geydDb250ZW50LVR5cGUnOidhcHBsaWNhdGlvbi9qc29uJ307CiAgICAgICAgaWYgKF9UKSBoWydBdXRob3JpemF0aW9uJ10gPSAnQmVhcmVyICcgKyBfVDsKICAgICAgICByZXR1cm4gT2JqZWN0LmFzc2lnbihoLCBlIHx8IHt9KTsKICAgIH0KCiAgICBhc3luYyBmdW5jdGlvbiBfZ2V0S2V5KCkgewogICAgICAgIGNvbnN0IHIgPSBhd2FpdCBmZXRjaChfQiArICcvZ2V0X2tleScsIHsgaGVhZGVyczogX2hlYWRlcnMoKSB9KTsKICAgICAgICBpZiAoIXIub2spIHsKICAgICAgICAgICAgaWYgKHIuc3RhdHVzID09PSA0MDEpIHsKICAgICAgICAgICAgICAgIGxvY2FsU3RvcmFnZS5yZW1vdmVJdGVtKCdfdCcpOwogICAgICAgICAgICAgICAgbG9jYXRpb24ucmVsb2FkKCk7CiAgICAgICAgICAgICAgICByZXR1cm47CiAgICAgICAgICAgIH0KICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGF3YWl0IHIudGV4dCgpKTsKICAgICAgICB9CiAgICAgICAgY29uc3QgZCA9IGF3YWl0IHIuanNvbigpOwogICAgICAgIF9LID0gVWludDhBcnJheS5mcm9tKGF0b2IoZC5rZXkpLCBjID0+IGMuY2hhckNvZGVBdCgwKSk7CiAgICB9CgogICAgYXN5bmMgZnVuY3Rpb24gX2VuYyhwKSB7CiAgICAgICAgaWYgKCFfSykgYXdhaXQgX2dldEtleSgpOwogICAgICAgIGNvbnN0IGUgPSBuZXcgVGV4dEVuY29kZXIoKS5lbmNvZGUocCk7CiAgICAgICAgY29uc3QgaXYgPSBjcnlwdG8uZ2V0UmFuZG9tVmFsdWVzKG5ldyBVaW50OEFycmF5KDEyKSk7CiAgICAgICAgY29uc3Qga2V5ID0gYXdhaXQgY3J5cHRvLnN1YnRsZS5pbXBvcnRLZXkoJ3JhdycsIF9LLCB7bmFtZTonQUVTLUdDTSd9LCBmYWxzZSwgWydlbmNyeXB0J10pOwogICAgICAgIGNvbnN0IGVuYyA9IGF3YWl0IGNyeXB0by5zdWJ0bGUuZW5jcnlwdCh7bmFtZTonQUVTLUdDTScsIGl2Oml2fSwga2V5LCBlKTsKICAgICAgICBjb25zdCBjID0gbmV3IFVpbnQ4QXJyYXkoaXYubGVuZ3RoICsgZW5jLmJ5dGVMZW5ndGgpOwogICAgICAgIGMuc2V0KGl2KTsKICAgICAgICBjLnNldChuZXcgVWludDhBcnJheShlbmMpLCBpdi5sZW5ndGgpOwogICAgICAgIHJldHVybiBidG9hKFN0cmluZy5mcm9tQ2hhckNvZGUoLi4uYykpOwogICAgfQoKICAgIGFzeW5jIGZ1bmN0aW9uIF9sb2FkKCkgewogICAgICAgIGxldCB1ID0gX0kudmFsdWUudHJpbSgpOwogICAgICAgIGlmICghdSkgcmV0dXJuOwogICAgICAgIGlmICghL15odHRwcz86XC9cLy9pLnRlc3QodSkpIHUgPSAnaHR0cHM6Ly8nICsgdTsKICAgICAgICBfUy50ZXh0Q29udGVudCA9ICfij7MgRW5jcnlwdGluZy4uLic7CiAgICAgICAgX1Muc3R5bGUuY29sb3IgPSAnI2ZmZDkzZCc7CiAgICAgICAgdHJ5IHsKICAgICAgICAgICAgY29uc3QgZW5jID0gYXdhaXQgX2VuYyh1KTsKICAgICAgICAgICAgX1MudGV4dENvbnRlbnQgPSAn4o+zIFNlbmRpbmcuLi4nOwogICAgICAgICAgICBjb25zdCByID0gYXdhaXQgZmV0Y2goX0IgKyAnL2ZldGNoJywgewogICAgICAgICAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgICAgICAgICBoZWFkZXJzOiBfaGVhZGVycygpLAogICAgICAgICAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoe2RhdGE6IGVuY30pCiAgICAgICAgICAgIH0pOwogICAgICAgICAgICBpZiAoIXIub2spIHsKICAgICAgICAgICAgICAgIGlmIChyLnN0YXR1cyA9PT0gNDAxKSB7CiAgICAgICAgICAgICAgICAgICAgbG9jYWxTdG9yYWdlLnJlbW92ZUl0ZW0oJ190Jyk7CiAgICAgICAgICAgICAgICAgICAgbG9jYXRpb24ucmVsb2FkKCk7CiAgICAgICAgICAgICAgICAgICAgcmV0dXJuOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGF3YWl0IHIudGV4dCgpKTsKICAgICAgICAgICAgfQogICAgICAgICAgICBfRi5zcmNkb2MgPSBhd2FpdCByLnRleHQoKTsKICAgICAgICAgICAgX1MudGV4dENvbnRlbnQgPSAn4pyFIERvbmUnOwogICAgICAgICAgICBfUy5zdHlsZS5jb2xvciA9ICcjNGVjZGM0JzsKICAgICAgICB9IGNhdGNoKGUpIHsKICAgICAgICAgICAgY29uc29sZS5lcnJvcihlKTsKICAgICAgICAgICAgX1MudGV4dENvbnRlbnQgPSAn4p2MICcgKyBlLm1lc3NhZ2U7CiAgICAgICAgICAgIF9TLnN0eWxlLmNvbG9yID0gJyNlOTQ1NjAnOwogICAgICAgIH0KICAgIH0KICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdCMicpLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywgX2xvYWQpOwogICAgX0kuYWRkRXZlbnRMaXN0ZW5lcigna2V5ZG93bicsIGUgPT4geyBpZiAoZS5rZXkgPT09ICdFbnRlcicpIF9sb2FkKCk7IH0pOwogICAgPC9zY3JpcHQ+CjwvYm9keT4KPC9odG1sPiIiIgoKaWYgX19uYW1lX18gPT0gJ19fbWFpbl9fJzoKICAgIGFwcC5ydW4oaG9zdD0nMC4wLjAuMCcsIHBvcnQ9NTAwMCwgZGVidWc9RmFsc2UsIHRocmVhZGVkPVRydWUpCiIiIgoKd2l0aCBvcGVuKCcvY29udGVudC9hcHAucHknLCAndycpIGFzIGY6CiAgICBmLndyaXRlKGFwcF9jb2RlKQpwcmludCgi4pyTIGFwcC5weSB3cml0dGVuIikKCiMgNC4gU3RhcnQgQ2xvdWRmbGFyZSBUdW5uZWwKZGVmIHJ1bl90dW5uZWwoKToKICAgIHdpdGggb3BlbignL2NvbnRlbnQvdHVubmVsLmxvZycsICd3JykgYXMgbG9nZmlsZToKICAgICAgICBwID0gc3VicHJvY2Vzcy5Qb3BlbigKICAgICAgICAgICAgWycvY29udGVudC9jbG91ZGZsYXJlZCcsICd0dW5uZWwnLCAnLS11cmwnLCAnaHR0cDovLzEyNy4wLjAuMTo1MDAwJ10sCiAgICAgICAgICAgIHN0ZG91dD1sb2dmaWxlLCBzdGRlcnI9c3VicHJvY2Vzcy5TVERPVVQKICAgICAgICApCiAgICAgICAgcHJpbnQoIldhaXRpbmcgZm9yIENsb3VkZmxhcmUgVHVubmVsLi4uIikKICAgICAgICB0aW1lLnNsZWVwKDEwKQogICAgICAgIHdpdGggb3BlbignL2NvbnRlbnQvdHVubmVsLmxvZycsICdyJykgYXMgZjoKICAgICAgICAgICAgbG9nID0gZi5yZWFkKCkKICAgICAgICB1cmxfbWF0Y2ggPSByZS5zZWFyY2gocidodHRwczovL1thLXowLTktXStcLnRyeWNsb3VkZmxhcmVcLmNvbScsIGxvZykKICAgICAgICBpZiB1cmxfbWF0Y2g6CiAgICAgICAgICAgIHByaW50KGYi4pyTIFR1bm5lbCBVUkw6IHt1cmxfbWF0Y2guZ3JvdXAoMCl9IikKICAgICAgICBlbHNlOgogICAgICAgICAgICBwcmludCgiISBUdW5uZWwgVVJMIG5vdCBmb3VuZCB5ZXQuIENoZWNrIC9jb250ZW50L3R1bm5lbC5sb2ciKQogICAgICAgIHAud2FpdCgpCgp0aHJlYWRpbmcuVGhyZWFkKHRhcmdldD1ydW5fdHVubmVsLCBkYWVtb249VHJ1ZSkuc3RhcnQoKQoKIyA1LiBTdGFydCBGbGFzawpwcmludCgiU3RhcnRpbmcgRmxhc2suLi4iKQohcHl0aG9uIC9jb250ZW50L2FwcC5weQo=";
+  (function() {
+    const tabs = document.querySelectorAll('.lang-tab');
+    const contents = document.querySelectorAll('.lang-content');
 
-  function insertCode() {
-    const decoded = new TextDecoder().decode(
-      Uint8Array.from(atob(PROXY_CODE_B64), c => c.charCodeAt(0))
-    );
-    ['code-en', 'code-ja', 'code-zh'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        const pre = el.querySelector('pre');
-        if (pre) pre.textContent = decoded;
-      }
-    });
-  }
+    function switchLang(lang) {
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.lang === lang);
+      });
+      contents.forEach(content => {
+        content.classList.toggle('hidden', content.dataset.lang !== lang);
+      });
+    }
 
-  const tabs = document.querySelectorAll('.lang-tab');
-  const contents = document.querySelectorAll('.lang-content');
-  function switchLang(lang) {
     tabs.forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.lang === lang);
+      tab.addEventListener('click', function() {
+        switchLang(this.dataset.lang);
+      });
     });
-    contents.forEach(content => {
-      content.classList.toggle('hidden', content.dataset.lang !== lang);
-    });
-  }
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      switchLang(this.dataset.lang);
-    });
-  });
 
-  insertCode();
-})();
+    // default: English (already active)
+  })();
 </script>
+
 </body>
 </html>
