@@ -1,4 +1,5 @@
-#for Vr4.0.0
+#for Vr4.0.0 onwards
+
 # 安装 Python 依赖
 !pip install flask flask-sock flask-limiter requests bcrypt cryptography pysocks -q
 
