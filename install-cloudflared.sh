@@ -1,3 +1,4 @@
+#for Vr4.0.0
 # 下载并安装 cloudflared
 !wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
 !dpkg -i cloudflared-linux-amd64.deb > /dev/null 2>&1
