@@ -260,10 +260,12 @@ const _B = window.location.origin.replace('http', 'ws');
 let _ws = null;
 let _K = null;
 
-// XSS対策
-function escapeHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+// XSS対策: HTMLエスケープ関数
+function escapeHtml(t) {
+    return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
 
-// 【修正】スタックオーバーフローを防ぐ安全なBase64エンコード
+// 【修正】スタックオーバーフローを防ぐ安全なBase64エンコード (チャンク処理)
 function _uint8ToBase64(u8a) {
     let binary = '';
     const chunkSize = 0x8000;
@@ -279,8 +281,8 @@ async function _login() {
     try {
         const r = await fetch('/login', {
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({password: p})
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: p })
         });
         if (r.ok) {
             const d = await r.json();
@@ -289,7 +291,10 @@ async function _login() {
         } else {
             document.getElementById('M1').textContent = 'Invalid password';
         }
-    } catch(e) { alert("Login error: " + e.message); }
+    } catch (e) {
+        console.error("Login error:", e);
+        alert("Login error: " + e.message);
+    }
 }
 
 function _connectWs(token) {
@@ -313,12 +318,13 @@ function _connectWs(token) {
                 const raw = Uint8Array.from(atob(msg), c => c.charCodeAt(0));
                 const iv = raw.slice(0, 12);
                 const ct = raw.slice(12);
-                const key = await crypto.subtle.importKey('raw', _K, {name:'AES-GCM'}, false, ['decrypt']);
-                const dec = await crypto.subtle.decrypt({name:'AES-GCM', iv:iv}, key, ct);
+                const key = await crypto.subtle.importKey('raw', _K, { name: 'AES-GCM' }, false, ['decrypt']);
+                const dec = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ct);
                 const html = new TextDecoder().decode(dec);
-                
+
                 if (html.startsWith('{"error"')) {
                     const err = JSON.parse(html);
+                    // XSS対策: エスケープして挿入
                     document.getElementById('F1').srcdoc = `<h1>Error ${escapeHtml(err.status)}</h1><p>${escapeHtml(err.error)}</p>`;
                 } else {
                     document.getElementById('F1').srcdoc = html;
@@ -326,7 +332,7 @@ function _connectWs(token) {
                 // 成功したらステータスを戻す
                 document.getElementById('S1').textContent = '● Tunnel Active';
                 document.getElementById('S1').style.color = '#4ecdc4';
-            } catch(e) {
+            } catch (e) {
                 console.error("Decrypt error:", e);
                 document.getElementById('S1').textContent = '× Decrypt Failed';
                 document.getElementById('S1').style.color = '#e94560';
@@ -344,11 +350,12 @@ async function _enc(p) {
     try {
         const e = new TextEncoder().encode(p);
         const iv = crypto.getRandomValues(new Uint8Array(12));
-        const key = await crypto.subtle.importKey('raw', _K, {name:'AES-GCM'}, false, ['encrypt']);
-        const enc = await crypto.subtle.encrypt({name:'AES-GCM', iv:iv}, key, e);
+        const key = await crypto.subtle.importKey('raw', _K, { name: 'AES-GCM' }, false, ['encrypt']);
+        const enc = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, e);
         const c = new Uint8Array(iv.length + enc.byteLength);
-        c.set(iv); 
+        c.set(iv);
         c.set(new Uint8Array(enc), iv.length);
+        // 【修正】安全なBase64エンコードを使用
         return _uint8ToBase64(c);
     } catch (err) {
         console.error("Encryption error:", err);
@@ -364,22 +371,23 @@ async function _load() {
     }
     let u = document.getElementById('I2').value.trim();
     if (!u) return;
-    if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
-    
+    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+
     // 【修正】Loading状態をUIに反映
     document.getElementById('S1').textContent = '⏳ Loading...';
     document.getElementById('S1').style.color = '#f39c12';
-    
+
     const payload = await _enc(u);
     if (!payload) {
         document.getElementById('S1').textContent = '● Tunnel Active';
         document.getElementById('S1').style.color = '#4ecdc4';
         return;
     }
-    
+
     try {
-        _ws.send(JSON.stringify({type: 'fetch', payload: payload}));
+        _ws.send(JSON.stringify({ type: 'fetch', payload: payload }));
     } catch (err) {
+        console.error("Send error:", err);
         document.getElementById('S1').textContent = '× Send Failed';
         document.getElementById('S1').style.color = '#e94560';
     }
@@ -388,14 +396,14 @@ async function _load() {
 function _startHeartbeat() {
     setInterval(() => {
         if (_ws && _ws.readyState === WebSocket.OPEN) {
-            _ws.send(JSON.stringify({type: 'ping'}));
+            _ws.send(JSON.stringify({ type: 'ping' }));
         }
     }, 30000);
 }
 
 document.getElementById('B1').addEventListener('click', _login);
 document.getElementById('B2').addEventListener('click', _load);
-document.getElementById('I2').addEventListener('keydown', e => { if(e.key==='Enter') _load(); });
+document.getElementById('I2').addEventListener('keydown', e => { if (e.key === 'Enter') _load(); });
 
 if (localStorage.getItem('_t')) {
     _connectWs(localStorage.getItem('_t'));
