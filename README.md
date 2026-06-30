@@ -8,3 +8,4 @@ https://y-redhat.github.io/Secure-Search-Site/
 # Important
 These models(Vr1.0.0 and Vr2.0.0)are still under development. They may contain vulnerabilities that have not yet been fixed.
 Please exercise caution when using them.
+Creating public servers that place a heavy load on the system is prohibited on Colab. Please use the service at your own discretion.
